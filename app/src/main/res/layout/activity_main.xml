@@ -8,45 +8,65 @@
         tools:context=".MainActivity">
 
     <TextView
-            android:layout_width="143dp"
-            android:layout_height="30dp"
-            android:text="Book a flight"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.075"
-            android:textAlignment="center" android:textColor="@android:color/background_dark"
-            android:id="@+id/textView"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/txtDepature" android:layout_marginStart="84dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView" tools:text="Fly from ..."/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/txtDestination" android:layout_marginStart="84dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/txtDepature" tools:text="Fly to ..."/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/txtDate" android:layout_marginStart="84dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/txtDestination" tools:text="Date"/>
+        android:id="@+id/textView"
+        android:layout_width="143dp"
+        android:layout_height="30dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.075" />
+
     <Button
-            android:text="Book flight"
-            android:layout_width="387dp"
-            android:layout_height="54dp"
-            android:id="@+id/btnReserve" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.473"/>
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="390dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/btnCreateAccount"
+        app:layout_constraintBottom_toTopOf="@+id/btnReserveSeat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btnCancelReservation"
+        android:layout_width="390dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/btnCancelReservation"
+        app:layout_constraintBottom_toTopOf="@+id/btnManageSystem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnReserveSeat" />
+
+    <Button
+        android:id="@+id/btnManageSystem"
+        android:layout_width="390dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/btnManageSystem"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCancelReservation"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnReserveSeat"
+        android:layout_width="390dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/btnReserveSeat"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancelReservation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
 
 </android.support.constraint.ConstraintLayout>

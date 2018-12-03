@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">FlightReservation</string>
+    <string name="app_name">Flight Reservation</string>
+    <string name="btnCreateAccount">Create Account</string>
+    <string name="btnReserveSeat">Reserve Seat</string>
+    <string name="btnCancelReservation">Cancel Reservation</string>
+    <string name="btnManageSystem">Manage System</string>
 </resources>
