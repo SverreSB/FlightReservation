@@ -11,7 +11,7 @@ class ReserveSeat : AppCompatActivity() {
         setContentView(R.layout.activity_reserve_seat)
 
         btnMain.setOnClickListener{
-            finish()
+
         }
     }
 }
