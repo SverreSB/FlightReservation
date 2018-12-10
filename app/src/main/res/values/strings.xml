@@ -4,4 +4,8 @@
     <string name="btnReserveSeat">Reserve Seat</string>
     <string name="btnCancelReservation">Cancel Reservation</string>
     <string name="btnManageSystem">Manage System</string>
+
+    <string name="hintDeparture">Airport: Departure</string>
+    <string name="hintArrival">Airport: Arrival</string>
+    <string name="hintSeats">Number of seats</string>
 </resources>

@@ -3,7 +3,7 @@ package edu.sverrebroen.csumb.flightreservation
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import edu.sverrebroen.csumb.flightreservation.UserDatabase.DatabaseHandler
+import edu.sverrebroen.csumb.flightreservation.Database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_create_accout.*
 import java.util.regex.Pattern
 
@@ -29,16 +29,15 @@ class CreateAccount : AppCompatActivity() {
 
             if(!userExist(inputUN, db)){
                 var user = User(txtUsername.text.toString(), inputPW)
-                db.insertData(user)
-
+                db.insertUserDB(user)
             }
         }
 
         button2.setOnClickListener {
-            var data = db.readData()
+            var data = db.getUserDB()
             textView2.text = ""
             for(i in 0 ..data.size - 1){
-                textView2.append(data.get(i).id.toString() + " " + data.get(i).username + data.get(i).password + "\n")
+                textView2.append(data.get(i).id.toString() + " " + data.get(i).username + " " + data.get(i).password + "\n")
             }
 
         }
@@ -49,8 +48,9 @@ class CreateAccount : AppCompatActivity() {
 
     }
 
+    //Function for validating if customer exists in database
     fun userExist(username : String, dataBase : DatabaseHandler) : Boolean{
-        var data = dataBase.readData()
+        var data = dataBase.getUserDB()
         for(i in 0 ..data.size -1){
             if(data.get(i).username == username){
                 Toast.makeText(this, "Username already used", Toast.LENGTH_SHORT).show()
@@ -60,6 +60,7 @@ class CreateAccount : AppCompatActivity() {
         return false
     }
 
+    //Function for validating username. Shall include 4 characters and 1 integer
     fun validateUN(username: String) : Boolean{
         var exp = ".*[0-9].*"
         var pattern = Pattern.compile(exp, Pattern.CASE_INSENSITIVE)
