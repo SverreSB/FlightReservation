@@ -5,7 +5,21 @@
     <string name="btnCancelReservation">Cancel Reservation</string>
     <string name="btnManageSystem">Manage System</string>
 
+    <string name="btn_login">Login</string>
+    <string name="btn_main">Main Menu</string>
+    <string name="btn_addFlight">Add Flight</string>
+    <string name="btn_confirm">Confirm</string>
+
     <string name="hintDeparture">Airport: Departure</string>
     <string name="hintArrival">Airport: Arrival</string>
-    <string name="hintSeats">Number of seats</string>
+    <string name="hintSeats">Number Of Seats</string>
+    <string name="hintFlightNum">Flight Number</string>
+    <string name="hintTime">Departure Time</string>
+    <string name="hintPrice">Ticket Price</string>
+    <string name="hintUsername">Username</string>
+    <string name="hintPassword">Password</string>
+
+
+
+
 </resources>

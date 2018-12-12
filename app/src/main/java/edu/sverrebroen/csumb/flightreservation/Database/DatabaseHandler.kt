@@ -23,24 +23,33 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
     var getContext : Context = context
 
     override fun onCreate(db: SQLiteDatabase?) {
-        /*var flight1 = Flights(1, "Otter101", "Monterey", "Los Angeles", "10:00(AM)", 10, 150.00)
-        var flight2 = Flights(2, "Otter102", "Los Angeles", "Monterey", "1:00(PM)", 10, 150.00)*/
-        /*val createUserTable = "CREATE TABLE " + TABLENAME + " (" +
-                UUID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                USERNAME + " VARCHAR(256)," +
-                PASSWORD + " VARCHAR(256))"*/
-        val createUserTable = createUserTable()
-        val createFlightTable = createFlightTable()
+        try{
+
+            var statements = SqlStatements()
+
+            val createUserTable = statements.createUserTable()
+            val createFlightTable = statements.createFlightTable()
+            val users = statements.initializeUsers()
+            val flights = statements.initializeFlights()
 
 
+            db?.execSQL(createUserTable)
+            db?.execSQL(createFlightTable)
 
+            //For loop that executes insert into sentences for user table
+            for(i in 0 ..(users.size - 1)){
+                db?.execSQL(users[i])
+            }
 
+            //For loop that executes insert into sentences for flight table
+            for(i in 0 ..(flights.size - 1)){
+                db?.execSQL(flights[i])
+            }
 
-        db?.execSQL(createUserTable)
-        db?.execSQL(createFlightTable)
+        }catch (sql : SQLiteException){
+            Log.d(TAG, "Couldn't create database in onCreate in DatabaseHandler")
+        }
 
-        /*insertFlightsDB(flight1)
-        insertFlightsDB(flight2)*/
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -54,52 +63,16 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
 
     }
 
-    /*fun insertData(user : User){
-        val db = this.writableDatabase
-
-        val cv = ContentValues()
-        /*cv.put(USERNAME, user.username)
-        cv.put(PASSWORD, user.password)*/
-        cv.put("username", user.username)
-        cv.put("password", user.password)
-        var result = db.insert("users", null, cv)
-        if(result == -1.toLong()){
-            Toast.makeText(getContext, "Failed", Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(getContext, "Success", Toast.LENGTH_SHORT).show()
-        }
-        db.close()
-
-    }*/
-
-
-    /*fun readData() : MutableList<User>{
-        var list : MutableList<User> = ArrayList()
-        val db = this.readableDatabase
-        val query = "SELECT * FROM $TABLENAME"
-        val result = db.rawQuery(query, null)
-        if(result.moveToFirst()){
-            do{
-                var user = User()
-                user.id = result.getString(result.getColumnIndex(UUID)).toInt()
-                user.username = result.getString(result.getColumnIndex(USERNAME))
-                user.password = result.getString(result.getColumnIndex(PASSWORD))
-                list.add(user)
-            }while(result.moveToNext())
-        }
-
-        result.close()
-        db.close()
-        return list
-    }*/
-
+    //Function for inserting user values into database
     fun insertUserDB(user : User){
         try {
+            var Cols = DatabaseTables.UserCols()
+
             val db = this.writableDatabase
             val cv = ContentValues()
-            cv.put("username", user.username)
-            cv.put("password", user.password)
-            var result = db.insert("users", null, cv)
+            cv.put(Cols.USERNAME, user.username)
+            cv.put(Cols.PASSWORD, user.password)
+            var result = db.insert(Cols.TABLENAME, null, cv)
             if(result == -1.toLong()){
                 Toast.makeText(getContext, "Failed", Toast.LENGTH_SHORT).show()
             }else{
@@ -113,18 +86,20 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
         }
     }
 
+    //Function for reading through database and storing the values in a user list. Returns list
     fun getUserDB() : MutableList<User>{
         var list: MutableList<User> = ArrayList()
         try {
+            var Cols = DatabaseTables.UserCols()
             val db = this.readableDatabase
-            val query = "SELECT * FROM users"
+            val query = "SELECT * FROM " + Cols.TABLENAME
             val result = db.rawQuery(query, null)
             if (result.moveToFirst()) {
                 do {
                     var user = User()
-                    user.id = result.getString(result.getColumnIndex("uuid")).toInt()
-                    user.username = result.getString(result.getColumnIndex("username"))
-                    user.password = result.getString(result.getColumnIndex("password"))
+                    user.id = result.getString(result.getColumnIndex(Cols.UUID)).toInt()
+                    user.username = result.getString(result.getColumnIndex(Cols.USERNAME))
+                    user.password = result.getString(result.getColumnIndex(Cols.PASSWORD))
                     list.add(user)
                 } while (result.moveToNext())
             }
@@ -138,6 +113,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
         return list
     }
 
+    //Function for inserting flight values into database
     fun insertFlightsDB(flights : Flights){
         try {
             val db = this.writableDatabase
@@ -160,22 +136,24 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
 
     }
 
+    //Function for reading through database and storing the values in a flight list. Returns list
     fun getFlightsDB() : MutableList<Flights>{
         var list : MutableList<Flights> = ArrayList()
         try{
+            val Cols = DatabaseTables.FlightCols()
             val db = this.readableDatabase
-            val query = "SELECT * FROM flights"
+            val query = "SELECT * FROM " + Cols.TABLENAME
             val result = db.rawQuery(query, null)
             if(result.moveToFirst()){
                 do{
                     var flights = Flights()
-                    flights.id = result.getString(result.getColumnIndex("uuid")).toInt()
-                    flights.flightNumber = result.getString(result.getColumnIndex("flight_number"))
-                    flights.departure = result.getString(result.getColumnIndex("departure"))
-                    flights.arrival = result.getString(result.getColumnIndex("arrival"))
-                    flights.time = result.getString(result.getColumnIndex("time"))
-                    flights.capacity = result.getString(result.getColumnIndex("capacity")).toInt()
-                    flights.price = result.getString(result.getColumnIndex("price")).toDouble()
+                    flights.id = result.getString(result.getColumnIndex(Cols.UUID)).toInt()
+                    flights.flightNumber = result.getString(result.getColumnIndex(Cols.FLIGHTNUMBER))
+                    flights.departure = result.getString(result.getColumnIndex(Cols.DEPARTURE))
+                    flights.arrival = result.getString(result.getColumnIndex(Cols.ARRIVAL))
+                    flights.time = result.getString(result.getColumnIndex(Cols.TIME))
+                    flights.capacity = result.getInt(result.getColumnIndex(Cols.CAPACITY))
+                    flights.price = result.getDouble(result.getColumnIndex(Cols.PRICE))
                     list.add(flights)
                 }while(result.moveToNext())
             }
@@ -190,28 +168,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
         return list
     }
 
-    fun createFlightTable() : String{
-        /*val TABLE = "flights"
-        val UID = "uuid"
-        val CAPACITY = "capacity"
-        val DEPARTURE = "departure"
-        val ARRIVAL  = "arrival"
-        val FLIGHTNUMBER = "flightnumber"
-        val TIME = "time"
-        val PRICE = "price"*/
 
-        return "CREATE TABLE flights (uuid INTEGER PRIMARY KEY, " +
-                "flight_number VARCHAR(8), departure VARCHAR(32), " +
-                "arrival VARCHAR(32), time VARCHAR(9), " +
-                "capacity INTEGER, price DECIMAL);"
-    }
-
-    fun createUserTable() : String{
-        return "CREATE TABLE users (uuid INTEGER PRIMARY KEY," +
-                "username VARCHAR(256), password VARCHAR(256));"
-
-
-    }
 
 }
 

@@ -1,9 +1,10 @@
 package edu.sverrebroen.csumb.flightreservation
 
-import java.text.SimpleDateFormat
-import java.util.*
 
-class Flights {
+
+
+
+class Flights{
 
 
     var id : Int = 0
@@ -18,8 +19,7 @@ class Flights {
 
 
 
-    constructor(id : Int, flightNumber: String, departure : String, arrival : String, time: String, capacity : Int, price : Double){
-        this.id = id
+    constructor(flightNumber: String, departure : String, arrival : String, time: String, capacity : Int, price : Double){
         this.flightNumber = flightNumber
         this.departure = departure
         this.arrival = arrival
@@ -29,6 +29,8 @@ class Flights {
     }
 
     constructor()
+
+
 
 
 

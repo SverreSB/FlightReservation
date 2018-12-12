@@ -1,7 +1,9 @@
 package edu.sverrebroen.csumb.flightreservation
 
+import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import edu.sverrebroen.csumb.flightreservation.Database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_create_accout.*
@@ -15,21 +17,32 @@ class CreateAccount : AppCompatActivity() {
         setContentView(R.layout.activity_create_accout)
         var context = this
         var db = DatabaseHandler(context)
+        var timesFailed = 0
         btnCreateUser.setOnClickListener {
             //add function her to validate username and password. TOAST correctly
             var inputUN = txtUsername.text.toString()
             var inputPW = txtPassword.text.toString()
-            //FIX VALIDATION
-            /*if(validateUN(inputUN)){
-                Toast.makeText(context, "Is valid", Toast.LENGTH_SHORT).show()
+
+            if(validateUN(inputUN) && validatePW(inputPW)){
+                if(!userExist(inputUN, db)){
+                    var user = User(txtUsername.text.toString(), inputPW)
+                    db.insertUserDB(user)
+                    timesFailed = 0
+                }
+                else{
+                    timesFailed++
+                }
             }
             else{
-                Toast.makeText(context, "Is invalid", Toast.LENGTH_SHORT).show()
-            }*/
+                timesFailed++
+            }
 
-            if(!userExist(inputUN, db)){
-                var user = User(txtUsername.text.toString(), inputPW)
-                db.insertUserDB(user)
+            if(timesFailed > 1){
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Error! Can't create user")
+                builder.setMessage("You failed making a user to many times. Please return to main menu")
+                builder.setNeutralButton("Confirm"){ dialogInterface: DialogInterface, i: Int -> finish()}
+                builder.show()
             }
         }
 
@@ -40,6 +53,9 @@ class CreateAccount : AppCompatActivity() {
                 textView2.append(data.get(i).id.toString() + " " + data.get(i).username + " " + data.get(i).password + "\n")
             }
 
+
+
+
         }
 
         btnMain.setOnClickListener{
@@ -47,6 +63,7 @@ class CreateAccount : AppCompatActivity() {
         }
 
     }
+
 
     //Function for validating if customer exists in database
     fun userExist(username : String, dataBase : DatabaseHandler) : Boolean{
@@ -60,12 +77,25 @@ class CreateAccount : AppCompatActivity() {
         return false
     }
 
-    //Function for validating username. Shall include 4 characters and 1 integer
+    //Function for validating username. Shall include 3 characters and 1 integer, with minimum length of 4
     fun validateUN(username: String) : Boolean{
-        var exp = ".*[0-9].*"
-        var pattern = Pattern.compile(exp, Pattern.CASE_INSENSITIVE)
+        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[0-9])[a-zA-Z0-9]{4,}"
+        var pattern = Pattern.compile(exp)
         var matcher = pattern.matcher(username)
         if (!matcher.matches()) {
+            Toast.makeText(this, "Username must contain: \n 3 Letters(a-z A-Z) \n 1 number(0-9)", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    //Function for validating username. Shall include 3 characters and 1 integer, with minimum length of 4
+    fun validatePW(password: String) : Boolean{
+        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{4,}"
+        var pattern = Pattern.compile(exp)
+        var matcher = pattern.matcher(password)
+        if (!matcher.matches()) {
+            Toast.makeText(this, "Password must contain: \n 3 Letters(a-z A-Z) \n 1 number(0-9)", Toast.LENGTH_LONG).show()
             return false
         }
         return true

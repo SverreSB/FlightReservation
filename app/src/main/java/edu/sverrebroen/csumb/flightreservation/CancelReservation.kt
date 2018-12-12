@@ -2,7 +2,8 @@ package edu.sverrebroen.csumb.flightreservation
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_create_accout.*
+import kotlinx.android.synthetic.main.activity_cancel_reservation.*
+
 
 class CancelReservation : AppCompatActivity() {
 
