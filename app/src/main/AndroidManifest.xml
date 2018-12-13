@@ -22,7 +22,8 @@
         <activity android:name=".ManageSystem" />
         <activity android:name=".AddFlight" />
         <activity android:name=".Login" />
-        <activity android:name=".FlightOptions"></activity>
+        <activity android:name=".FlightOptions" />
+        <activity android:name=".DisplayReservations"></activity>
     </application>
 
 </manifest>

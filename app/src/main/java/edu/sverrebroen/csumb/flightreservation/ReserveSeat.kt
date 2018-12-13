@@ -28,7 +28,10 @@ class ReserveSeat : AppCompatActivity() {
             var inputArrival = txtArrival.text.toString()
             var inputSeats = numSeats.text.toString().toInt()
 
-            if(inputSeats <= 7){
+
+
+
+            if(inputSeats <= 7 && inputSeats > 0){
 
                 //var foundFlights = findFlights(inputDeparture, inputArrival, inputSeats)
                 if(foundFlights(inputDeparture, inputArrival, inputSeats)){
@@ -51,8 +54,8 @@ class ReserveSeat : AppCompatActivity() {
             }
             else{
                 val builder = AlertDialog.Builder(this)
-                builder.setTitle("Error! Too many tickets requested")
-                builder.setMessage("You have requested too many seats(max 7), please confirm to go back to main menu")
+                builder.setTitle("Error! Invalid number of tickets")
+                builder.setMessage("You have requested an invalid amount of tickets \n Max: 7 \n Min: 1 \n Click 'Confirm' to go back to main menu")
                 builder.setNeutralButton("Confirm"){ dialogInterface: DialogInterface, i: Int -> startActivity(intentMain)}
                 builder.show()
             }
@@ -64,17 +67,18 @@ class ReserveSeat : AppCompatActivity() {
         }
 
         btnMain.setOnClickListener{
+            finish()
+
+
+        }
+        /*btnMain.setOnLongClickListener{
             var data = db.getFlightsDB()
             txtHeader.text = ""
             for(i in 0 ..data.size - 1){
-                txtHeader.append(data.get(i).flightNumber + " " + data.get(i).departure + " " + data.get(i).arrival + " " + data.get(i).capacity + "\n")
+                txtHeader.append(data.get(i).flightNumber + " " + data.get(i).departure + " " + data.get(i).arrival + " " + data.get(i).capacity + " " + data.get(i).soldTickets + "\n")
             }
-
-        }
-        btnMain.setOnLongClickListener{
-            finish()
             true
-        }
+        }*/
 
 
     }
@@ -91,7 +95,7 @@ class ReserveSeat : AppCompatActivity() {
 
         for(i in 0 ..(flightList.size - 1)){
             if(flightList[i].departure == departure && flightList[i].arrival == arrival){
-                if(flightList[i].capacity > seats){
+                if((flightList[i].capacity - flightList[i].soldTickets) >= seats){
                     list.add(flightList[i])
                 }
             }
@@ -106,12 +110,13 @@ class ReserveSeat : AppCompatActivity() {
 
         for(i in 0 ..(flightList.size - 1)){
             if(flightList[i].departure == departure && flightList[i].arrival == arrival){
-                if(flightList[i].capacity > seats){
+                if((flightList[i].capacity - flightList[i].soldTickets) >= seats){
                     return true
                 }
             }
         }
         return false
     }
+
 
 }

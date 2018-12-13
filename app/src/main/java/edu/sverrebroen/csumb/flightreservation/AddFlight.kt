@@ -36,7 +36,7 @@ class AddFlight : AppCompatActivity() {
             list.add(price)
 
             if(!emptyFields(list) && !existingFlight(flightNumb)){
-                var flight = Flights(flightNumb, departure, arrival, time, seats.toInt(), price.toDouble())
+                var flight = Flights(flightNumb, departure, arrival, time, seats.toInt(), 0, price.toDouble())
                 db.insertFlightsDB(flight)
                 startActivity(intent)
 

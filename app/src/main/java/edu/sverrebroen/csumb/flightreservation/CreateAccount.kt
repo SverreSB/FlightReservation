@@ -52,10 +52,6 @@ class CreateAccount : AppCompatActivity() {
             for(i in 0 ..data.size - 1){
                 textView2.append(data.get(i).id.toString() + " " + data.get(i).username + " " + data.get(i).password + "\n")
             }
-
-
-
-
         }
 
         btnMain.setOnClickListener{

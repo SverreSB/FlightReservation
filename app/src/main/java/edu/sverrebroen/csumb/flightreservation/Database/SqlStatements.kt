@@ -7,9 +7,10 @@ class SqlStatements {
         val Cols = DatabaseTables.FlightCols()
 
         var sqlFlight = "CREATE TABLE " + Cols.TABLENAME + " (" + Cols.UUID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        Cols.FLIGHTNUMBER + " VARCHAR(8), " + Cols.DEPARTURE + " VARCHAR(32), " +
+                        Cols.FLIGHTNUMBER + " VARCHAR(32), " + Cols.DEPARTURE + " VARCHAR(32), " +
                         Cols.ARRIVAL + " VARCHAR(32), " + Cols.TIME + " VARCHAR(9), " +
-                        Cols.CAPACITY + " INTEGER, " + Cols.PRICE + " DECIMAL);"
+                        Cols.CAPACITY + " INTEGER, " + Cols.SOLDTICKETS + " INTEGER, " + Cols.PRICE + " DECIMAL);"
+
 
         return sqlFlight
     }
@@ -24,6 +25,15 @@ class SqlStatements {
         return sqlUser
     }
 
+    fun createReservationTable() : String{
+        val Cols = DatabaseTables.ReservationCols()
+
+        var sqlReservation = "CREATE TABLE " + Cols.TABLENAME + " (" + Cols.UUID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                Cols.FLIGHTNUMBER + " VARCHAR(32), " + Cols.USERNAME + " VARCHAR(256), " + Cols.TICKETS + " INTEGER);"
+
+        return sqlReservation
+    }
+
     //Function for sql insert into.
     // Returns a list with 4 insert into sentences for user table that shall be initialized every time the database is created
     fun initializeUsers() : MutableList<String>{
@@ -34,7 +44,7 @@ class SqlStatements {
 
         val user1 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('alice5', 'csumb100');"
         val user2 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('brian77', '123ABC');"
-        val user3 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('Chris21', 'CHRIS21');"
+        val user3 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('chris21', 'CHRIS21');"
         val admin = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('admin2', 'admin2');"
 
         list.add(user1)
@@ -54,24 +64,24 @@ class SqlStatements {
         var list : MutableList<String> = ArrayList()
 
         val flight1 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.FLIGHTNUMBER + ", " + Cols.DEPARTURE + ", " +
-                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.PRICE +
-                ") VALUES ('Otter101', 'Monterey', 'Los Angeles', '10:00(AM)', 10, 150.00);"
+                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.SOLDTICKETS + ", " + Cols.PRICE +
+                ") VALUES ('Otter101', 'Monterey', 'Los Angeles', '10:00(AM)', 10, 0, 150.00);"
 
         var flight2 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.FLIGHTNUMBER + ", " + Cols.DEPARTURE + ", " +
-                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.PRICE +
-                ") VALUES ('Otter102', 'Los Angeles', 'Monterey', '01:00(PM)', 10, 150.00);"
+                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.SOLDTICKETS + ", " + Cols.PRICE +
+                ") VALUES ('Otter102', 'Los Angeles', 'Monterey', '01:00(PM)', 10, 0, 150.00);"
 
         var flight3 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.FLIGHTNUMBER + ", " + Cols.DEPARTURE + ", " +
-                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.PRICE +
-                ") VALUES ('Otter201', 'Monterey', 'Seattle', '11:00(AM)', 5, 200.50);"
+                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.SOLDTICKETS + ", " + Cols.PRICE +
+                ") VALUES ('Otter201', 'Monterey', 'Seattle', '11:00(AM)', 5, 0, 200.50);"
 
         var flight4 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.FLIGHTNUMBER + ", " + Cols.DEPARTURE + ", " +
-                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.PRICE +
-                ") VALUES ('Otter205', 'Monterey', 'Seattle', '03:00(PM)', 15, 150.00);"
+                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.SOLDTICKETS + ", " + Cols.PRICE +
+                ") VALUES ('Otter205', 'Monterey', 'Seattle', '03:00(PM)', 15, 0, 150.00);"
 
         var flight5 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.FLIGHTNUMBER + ", " + Cols.DEPARTURE + ", " +
-                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.PRICE +
-                ") VALUES ('Otter202', 'Seattle', 'Monterey', '2:00(PM)', 5, 200.50);"
+                Cols.ARRIVAL + ", " + Cols.TIME + ", " + Cols.CAPACITY + ", " + Cols.SOLDTICKETS + ", " + Cols.PRICE +
+                ") VALUES ('Otter202', 'Seattle', 'Monterey', '2:00(PM)', 5, 0, 200.50);"
 
 
         list.add(flight1)

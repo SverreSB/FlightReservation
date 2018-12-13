@@ -31,7 +31,7 @@ class FlightOptions : AppCompatActivity() {
 
         for(flight in foundFlights){
             val radioButton = RadioButton(this)
-            radioButton.text = flight.flightNumber + " " + flight.time
+            radioButton.text = flight.flightNumber + " " + flight.time + ", $" + flight.price
             radioGroup.addView(radioButton)
         }
 
@@ -66,7 +66,7 @@ class FlightOptions : AppCompatActivity() {
 
         for(i in 0 ..(flightList.size - 1)){
             if(flightList[i].departure == departure && flightList[i].arrival == arrival){
-                if(flightList[i].capacity > seats && seats != 0){
+                if((flightList[i].capacity - flightList[i].soldTickets) >= seats && seats != 0){
                     list.add(flightList[i])
                 }
             }
