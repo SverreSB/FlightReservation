@@ -53,11 +53,7 @@ class ReserveSeat : AppCompatActivity() {
                 }
             }
             else{
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Error! Invalid number of tickets")
-                builder.setMessage("You have requested an invalid amount of tickets \n Max: 7 \n Min: 1 \n Click 'Confirm' to go back to main menu")
-                builder.setNeutralButton("Confirm"){ dialogInterface: DialogInterface, i: Int -> startActivity(intentMain)}
-                builder.show()
+                Toast.makeText(this,"You have requested an invalid amount of tickets \nMax: 7 \nMin: 1 \n", Toast.LENGTH_LONG).show()
             }
 
 
@@ -71,14 +67,14 @@ class ReserveSeat : AppCompatActivity() {
 
 
         }
-        /*btnMain.setOnLongClickListener{
+        btnMain.setOnLongClickListener{
             var data = db.getFlightsDB()
             txtHeader.text = ""
             for(i in 0 ..data.size - 1){
                 txtHeader.append(data.get(i).flightNumber + " " + data.get(i).departure + " " + data.get(i).arrival + " " + data.get(i).capacity + " " + data.get(i).soldTickets + "\n")
             }
             true
-        }*/
+        }
 
 
     }

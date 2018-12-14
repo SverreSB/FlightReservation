@@ -55,7 +55,7 @@ class Login : AppCompatActivity() {
                     reservation.username = username
                     reservation.tickets = seats
                     db.insertReservations(reservation)
-                    db.updateSoldTickets(seats, flightNumber, flight)
+                    db.updateSoldTickets(seats, flight)
                     startActivity(intentMain)
 
                 }
@@ -64,7 +64,13 @@ class Login : AppCompatActivity() {
                     cancelDialog.setTitle("Cancel reservation")
                     cancelDialog.setMessage("Click 'CONFIRM' to cancel reservation, click 'ORDER' to finish flight reservation")
                     cancelDialog.setPositiveButton("CONFIRM"){ dialogInterface: DialogInterface, i: Int ->
-                        startActivity(intentMain)
+                        var errorDialog = AlertDialog.Builder(this)
+                        errorDialog.setTitle("Error! Reservation failure")
+                        errorDialog.setMessage("Reservation is canceled. Click 'Confirm' to go back to main menu")
+                        errorDialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
+                            startActivity(intentMain)
+                        }
+                        errorDialog.show()
                     }
                     cancelDialog.setNegativeButton("ORDER"){ dialogInterface: DialogInterface, i: Int ->
                         var reservation = Reservations()
@@ -74,7 +80,7 @@ class Login : AppCompatActivity() {
                         reservation.username = username
                         reservation.tickets = seats
                         db.insertReservations(reservation)
-                        db.updateSoldTickets(seats, flightNumber, flight)
+                        db.updateSoldTickets(seats,  flight)
                     }
                     cancelDialog.show()
                 }

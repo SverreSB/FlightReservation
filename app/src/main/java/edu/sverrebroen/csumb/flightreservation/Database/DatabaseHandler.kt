@@ -183,7 +183,9 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             cv.put(Cols.USERNAME, reservation.username)
             cv.put(Cols.TICKETS, reservation.tickets)
 
-            db.insert(Cols.TABLENAME, null, cv)
+            var result = db.insert(Cols.TABLENAME, null, cv)
+
+
 
             db.close()
 
@@ -219,7 +221,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
     }
 
 
-    fun updateSoldTickets(tickets : Int, flightNumb : String,  flights : Flights) : Boolean{
+    fun updateSoldTickets(tickets : Int, flights : Flights) : Boolean{
 
         try{
             val db = this.writableDatabase
@@ -237,7 +239,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             cv.put(Cols.SOLDTICKETS, flights.soldTickets + tickets)
             cv.put(Cols.PRICE, flights.price)
 
-            db.update(Cols.TABLENAME, cv, Cols.FLIGHTNUMBER + " = ?", arrayOf(flightNumb))
+            db.update(Cols.TABLENAME, cv, Cols.FLIGHTNUMBER + " = ?", arrayOf(flights.flightNumber))
 
             result.close()
             db.close()
@@ -248,6 +250,13 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             return false
         }
 
+    }
+
+    fun cancelReservation(reservationNumber: Int, tickets : Int, flight : Flights){
+        val Cols = DatabaseTables.ReservationCols()
+        val db = this.writableDatabase
+        db.delete(Cols.TABLENAME, Cols.UUID + " = ?", arrayOf(reservationNumber.toString()))
+        updateSoldTickets((tickets * (-1)), flight)
     }
 
 }

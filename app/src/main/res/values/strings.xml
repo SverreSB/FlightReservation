@@ -9,6 +9,7 @@
     <string name="btn_main">Main Menu</string>
     <string name="btn_addFlight">Add Flight</string>
     <string name="btn_confirm">Confirm</string>
+    <string name="btn_findFlightss">Find Flights</string>
 
     <string name="hintDeparture">Airport: Departure</string>
     <string name="hintArrival">Airport: Arrival</string>
@@ -18,6 +19,8 @@
     <string name="hintPrice">Ticket Price</string>
     <string name="hintUsername">Username</string>
     <string name="hintPassword">Password</string>
+
+
 
 
 </resources>

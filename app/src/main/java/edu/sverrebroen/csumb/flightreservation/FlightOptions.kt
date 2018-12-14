@@ -31,7 +31,7 @@ class FlightOptions : AppCompatActivity() {
 
         for(flight in foundFlights){
             val radioButton = RadioButton(this)
-            radioButton.text = flight.flightNumber + " " + flight.time + ", $" + flight.price
+            radioButton.text = flight.flightNumber + " " + flight.departure + " -> " + flight.arrival + " ("+ flight.time + "), $" + flight.price
             radioGroup.addView(radioButton)
         }
 

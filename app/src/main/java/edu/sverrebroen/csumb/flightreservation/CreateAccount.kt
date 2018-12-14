@@ -28,6 +28,8 @@ class CreateAccount : AppCompatActivity() {
                     var user = User(txtUsername.text.toString(), inputPW)
                     db.insertUserDB(user)
                     timesFailed = 0
+                    Toast.makeText(this, "Success. User: $inputUN created.", Toast.LENGTH_LONG).show()
+                    finish()
                 }
                 else{
                     timesFailed++
