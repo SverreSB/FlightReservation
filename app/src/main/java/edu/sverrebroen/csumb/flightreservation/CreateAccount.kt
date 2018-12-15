@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.widget.Toast
 import edu.sverrebroen.csumb.flightreservation.Database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_create_accout.*
@@ -26,7 +27,9 @@ class CreateAccount : AppCompatActivity() {
             if(validateUN(inputUN) && validatePW(inputPW)){
                 if(!userExist(inputUN, db)){
                     var user = User(txtUsername.text.toString(), inputPW)
+                    var log = Logs("$inputUN", "new account", "$inputUN")
                     db.insertUserDB(user)
+                    db.insertLog(log)
                     timesFailed = 0
                     Toast.makeText(this, "Success. User: $inputUN created.", Toast.LENGTH_LONG).show()
                     finish()
@@ -48,13 +51,6 @@ class CreateAccount : AppCompatActivity() {
             }
         }
 
-        button2.setOnClickListener {
-            var data = db.getUserDB()
-            textView2.text = ""
-            for(i in 0 ..data.size - 1){
-                textView2.append(data.get(i).id.toString() + " " + data.get(i).username + " " + data.get(i).password + "\n")
-            }
-        }
 
         btnMain.setOnClickListener{
             finish()
@@ -77,7 +73,7 @@ class CreateAccount : AppCompatActivity() {
 
     //Function for validating username. Shall include 3 characters and 1 integer, with minimum length of 4
     fun validateUN(username: String) : Boolean{
-        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[0-9])[a-zA-Z0-9]{4,}"
+        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*)(?=.*\\d)[a-zA-Z0-9]{4,}"
         var pattern = Pattern.compile(exp)
         var matcher = pattern.matcher(username)
         if (!matcher.matches()) {
@@ -89,7 +85,7 @@ class CreateAccount : AppCompatActivity() {
 
     //Function for validating username. Shall include 3 characters and 1 integer, with minimum length of 4
     fun validatePW(password: String) : Boolean{
-        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{4,}"
+        var exp = "(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*)(?=.*\\d)[a-zA-Z0-9]{4,}"
         var pattern = Pattern.compile(exp)
         var matcher = pattern.matcher(password)
         if (!matcher.matches()) {

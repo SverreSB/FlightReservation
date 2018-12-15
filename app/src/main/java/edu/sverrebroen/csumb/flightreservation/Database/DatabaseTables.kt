@@ -31,5 +31,14 @@ class DatabaseTables {
         val TICKETS = "tickets"
     }
 
+    class LogCols{
+        val TABLENAME = "logs"
+        val UUID = "uuid"
+        val USERNAME = "username"
+        val LOGTYPE = "logtype"
+        val MESSAGE = "message"
+        //val DATE = "date"
+    }
+
 
 }

@@ -45,6 +45,7 @@ class Login : AppCompatActivity() {
                 dialog.setTitle("Confirm Order")
                 dialog.setMessage("Username: $username \nFlight number: ${flight.flightNumber} \n" +
                         "From: ${flight.departure} To: ${flight.arrival} \n" +
+                        "Time: ${flight.time} \n" +
                         "Number of tickets: $seats Amount owed: $$orderCost\n" +
                         "Reservation number: $reservationNumber \n")
                 dialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
@@ -56,6 +57,10 @@ class Login : AppCompatActivity() {
                     reservation.tickets = seats
                     db.insertReservations(reservation)
                     db.updateSoldTickets(seats, flight)
+                    var log = Logs(username, "Reserve seat", "Flight: $flightNumber \nTo: ${flight.departure}" +
+                            "From: ${flight.arrival}\n Tickets: $seats \nReservation number: $reservationNumber \n" +
+                            "Total amount: ${flight.price * seats} \n")
+                    db.insertLog(log)
                     startActivity(intentMain)
 
                 }
@@ -64,13 +69,7 @@ class Login : AppCompatActivity() {
                     cancelDialog.setTitle("Cancel reservation")
                     cancelDialog.setMessage("Click 'CONFIRM' to cancel reservation, click 'ORDER' to finish flight reservation")
                     cancelDialog.setPositiveButton("CONFIRM"){ dialogInterface: DialogInterface, i: Int ->
-                        var errorDialog = AlertDialog.Builder(this)
-                        errorDialog.setTitle("Error! Reservation failure")
-                        errorDialog.setMessage("Reservation is canceled. Click 'Confirm' to go back to main menu")
-                        errorDialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
-                            startActivity(intentMain)
-                        }
-                        errorDialog.show()
+                        confirmCancelation()
                     }
                     cancelDialog.setNegativeButton("ORDER"){ dialogInterface: DialogInterface, i: Int ->
                         var reservation = Reservations()
@@ -81,6 +80,10 @@ class Login : AppCompatActivity() {
                         reservation.tickets = seats
                         db.insertReservations(reservation)
                         db.updateSoldTickets(seats,  flight)
+                        var log = Logs(username, "Reserve seat", "Flight: $flightNumber \nTo: ${flight.departure} " +
+                                "From: ${flight.arrival}\n Tickets: $seats \nReservation number: $reservationNumber \n" +
+                                "Total amount: ${flight.price * seats} \n")
+                        db.insertLog(log)
                     }
                     cancelDialog.show()
                 }
@@ -97,16 +100,6 @@ class Login : AppCompatActivity() {
             startActivity(intentMain)
         }
 
-        /*btnMain.setOnLongClickListener {
-            var db = DatabaseHandler(this)
-            var data = db.getReservationDB()
-            txtGetLog.text = ""
-            for(i in 0 ..data.size - 1){
-                txtGetLog.append(data.get(i).uuid.toString() + " " + data.get(i).flightNumber + " " + data.get(i).username + "\n")
-            }
-
-            true
-        }*/
 
     }
 
@@ -149,5 +142,16 @@ class Login : AppCompatActivity() {
             randomID = random.nextInt(9000) + 1000
         }
         return randomID
+    }
+
+    fun confirmCancelation (){
+        var intentMain = Intent(this, MainActivity::class.java)
+        var errorDialog = AlertDialog.Builder(this)
+        errorDialog.setTitle("Error! Reservation failure")
+        errorDialog.setMessage("Reservation is canceled. Click 'Confirm' to go back to main menu")
+        errorDialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
+            startActivity(intentMain)
+        }
+        errorDialog.show()
     }
 }

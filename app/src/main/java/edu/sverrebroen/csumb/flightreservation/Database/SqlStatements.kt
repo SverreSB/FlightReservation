@@ -34,13 +34,23 @@ class SqlStatements {
         return sqlReservation
     }
 
+    fun createLogTable() : String {
+        val Cols = DatabaseTables.LogCols()
+
+        var sqlLog = "CREATE TABLE ${Cols.TABLENAME} (${Cols.UUID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "${Cols.USERNAME} VARCHAR(256), ${Cols.LOGTYPE} VARCHAR(32), ${Cols.MESSAGE} VARCHAR(256));"
+                //"${Cols.DATE} DATETIME);"
+
+        return sqlLog
+    }
+
     //Function for sql insert into.
     // Returns a list with 4 insert into sentences for user table that shall be initialized every time the database is created
     fun initializeUsers() : MutableList<String>{
 
         val Cols = DatabaseTables.UserCols()
 
-        var list : MutableList<String> = ArrayList()
+        var list : MutableList<String> = mutableListOf()
 
         val user1 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('alice5', 'csumb100');"
         val user2 = "INSERT INTO " + Cols.TABLENAME + " (" + Cols.USERNAME + ", " + Cols.PASSWORD + ") VALUES ('brian77', '123ABC');"

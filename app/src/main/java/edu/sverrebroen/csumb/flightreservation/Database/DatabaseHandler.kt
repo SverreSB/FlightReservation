@@ -9,6 +9,7 @@ import android.widget.Toast
 import edu.sverrebroen.csumb.flightreservation.Flights
 import edu.sverrebroen.csumb.flightreservation.User
 import android.util.Log
+import edu.sverrebroen.csumb.flightreservation.Logs
 import edu.sverrebroen.csumb.flightreservation.Reservations
 
 
@@ -28,6 +29,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             val createUserTable = statements.createUserTable()
             val createFlightTable = statements.createFlightTable()
             val createReservationTable = statements.createReservationTable()
+            val createLogTable = statements.createLogTable()
 
             val users = statements.initializeUsers()
             val flights = statements.initializeFlights()
@@ -37,6 +39,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             db?.execSQL(createUserTable)
             db?.execSQL(createFlightTable)
             db?.execSQL(createReservationTable)
+            db?.execSQL(createLogTable)
 
             //For loop that executes insert into sentences for user table
             for(i in 0 ..(users.size - 1)){
@@ -58,10 +61,12 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
         var sqlUsers = "DROP TABLE IF EXISTS users"
         var sqlFlights = "DROP TABLE IF EXISTS flights"
         var sqlReservations = "DROP TABLE IF EXISTS reservations"
+        var sqlLog = "DROP TABLE IF EXISTS logs"
 
         db?.execSQL(sqlUsers)
         db?.execSQL(sqlFlights)
         db?.execSQL(sqlReservations)
+        db?.execSQL(sqlLog)
 
         onCreate(db)
 
@@ -183,7 +188,9 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             cv.put(Cols.USERNAME, reservation.username)
             cv.put(Cols.TICKETS, reservation.tickets)
 
-            var result = db.insert(Cols.TABLENAME, null, cv)
+
+
+            db.insert(Cols.TABLENAME, null, cv)
 
 
 
@@ -193,6 +200,8 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
             Log.d(TAG, "Error in insertReservation() in databasehandler")
         }
     }
+
+
 
     fun getReservationDB() : MutableList<Reservations>{
         var list : MutableList<Reservations> = ArrayList()
@@ -220,7 +229,60 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
         return list
     }
 
+    fun getLogsDB() : MutableList<Logs>{
+        var list : MutableList<Logs> = ArrayList()
+        try{
+            val Cols = DatabaseTables.LogCols()
+            val db = this.readableDatabase
+            val query = "SELECT * FROM " + Cols.TABLENAME
+            val result = db.rawQuery(query, null)
+            if(result.moveToFirst()){
+                do{
+                    var logs = Logs()
+                    logs.uuid = result.getString(result.getColumnIndex(Cols.UUID)).toInt()
+                    logs.username = result.getString(result.getColumnIndex(Cols.USERNAME))
+                    logs.logType = result.getString(result.getColumnIndex(Cols.LOGTYPE))
+                    logs.message = result.getString(result.getColumnIndex(Cols.MESSAGE))
+                    //logs.date = result.getString(result.getColumnIndex(Cols.MESSAGE))
+                    list.add(logs)
+                }while(result.moveToNext())
+            }
+            result.close()
+            db.close()
+        }catch(sql : SQLiteException){
+            Log.d(TAG, "Error in getLogsDB in DatabaseHandler")
+        }
 
+        return list
+
+    }
+
+    fun insertLog(log : Logs){
+        try{
+            val db = this.writableDatabase
+            val Cols = DatabaseTables.LogCols()
+            val cv = ContentValues()
+
+            //cv.put(Cols.UUID, log.uuid)
+            cv.put(Cols.USERNAME, log.username)
+            cv.put(Cols.LOGTYPE, log.logType)
+            cv.put(Cols.MESSAGE, log.message)
+            //cv.put(Cols.DATE, "datetime('NOW')")
+
+            db.insert(Cols.TABLENAME, null, cv)
+
+
+
+            db.close()
+
+        }catch (sqlExp : SQLiteException){
+            Log.d(TAG, "Error in insertLog() in databasehandler")
+        }
+    }
+
+
+
+    //Function for updating the amount of sold tickets in the database
     fun updateSoldTickets(tickets : Int, flights : Flights) : Boolean{
 
         try{
@@ -252,11 +314,13 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, DATABASENAM
 
     }
 
+    //Function for deleting a row in the reservation database based on the reservation number.
     fun cancelReservation(reservationNumber: Int, tickets : Int, flight : Flights){
         val Cols = DatabaseTables.ReservationCols()
         val db = this.writableDatabase
         db.delete(Cols.TABLENAME, Cols.UUID + " = ?", arrayOf(reservationNumber.toString()))
         updateSoldTickets((tickets * (-1)), flight)
+        db.close()
     }
 
 }

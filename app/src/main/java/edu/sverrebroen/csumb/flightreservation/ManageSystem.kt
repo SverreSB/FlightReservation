@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
+import edu.sverrebroen.csumb.flightreservation.Database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_manage_system.*
+import java.util.*
 
 
 class ManageSystem : AppCompatActivity() {
@@ -22,15 +24,34 @@ class ManageSystem : AppCompatActivity() {
                 Toast.makeText(this, "Empty field(s): Please fill in both username and password in the input fields", Toast.LENGTH_LONG).show()
             }
             if(validate(inputUN, inputPW)){
+                val db = DatabaseHandler(this)
+                val list = db.getLogsDB()
+                Collections.reverse(list)
+                var message = ""
+
+                if(list.size == 0){
+                    message = "No available logs"
+                }
+
+                else{
+                    for(log in list){
+                        message += "Log : #${log.uuid}\n" +
+                                "Username: ${log.username}\n" +
+                                "Logtype: ${log.logType}\n" +
+                                "Message :\n${log.message}\n" +
+                                "\n \n \n"
+                    }
+                }
+
                 val intent = Intent(this, AddFlight::class.java)
                 val logBuilder = AlertDialog.Builder(this)
                 val flightBuilder = AlertDialog.Builder(this)
 
-                /*
-                    Add a if-statement to see if there are logs or not to show.
-                */
                 //AlertDialog for showing all logs.
                 logBuilder.setTitle("Log")
+
+                logBuilder.setMessage(message)
+
                 logBuilder.setNeutralButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->flightBuilder.show()}
                 logBuilder.show()
 

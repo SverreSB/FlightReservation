@@ -27,6 +27,15 @@ class DisplayReservations : AppCompatActivity() {
 
 
         var foundReservations = findReservations(username)
+        if(foundReservations.isEmpty()){
+            var dialog = AlertDialog.Builder(this)
+            dialog.setTitle("No reservations")
+            dialog.setMessage("No reservations on this username. Return to main menu by pressing 'Confirm'")
+            dialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
+                startActivity(intentMain)
+            }
+            dialog.show()
+        }
 
         //var foundFlights = findFlights(foundReservations)
 
@@ -60,7 +69,34 @@ class DisplayReservations : AppCompatActivity() {
             btnCancel.setOnClickListener {
                 val radioButton = findViewById<RadioButton>(i)
 
-                cancelReservation(uuidList[i-1], ticketList[i-1], flightList[i-1])
+                //cancelReservation(uuidList[i-1], ticketList[i-1], flightList[i-1])
+                var dialog = AlertDialog.Builder(this)
+                dialog.setTitle("Cancel Reservation")
+                dialog.setMessage("Are you sure you want to cancel reservation? \n" +
+                        "Click 'Confirm' to cancel, click 'No' to be sent back to main menu")
+                dialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, k : Int ->
+                    var db = DatabaseHandler(this)
+                    db.cancelReservation(uuidList[i-1], ticketList[i-1], flightList[i-1])
+                    var log = Logs(username, "Cancel Reservation", "Reservation number: ${uuidList[i-1]}\n" +
+                            "Flight: ${flightList[i-1].flightNumber} \n" +
+                            "To: ${flightList[i-1].departure} From: ${flightList[i-1].arrival}\n" +
+                            "Departure time: ${flightList[i-1].time} \nTickets: ${ticketList[i-1]}\n")
+                    db.insertLog(log)
+                    Toast.makeText(this, "Reservation for flight ${flightList[i-1].flightNumber} is canceled", Toast.LENGTH_SHORT).show()
+                    startActivity(intentMain)
+
+                }
+                dialog.setNegativeButton("No"){ dialogInterface : DialogInterface, j: Int ->
+                    val returnDialog = AlertDialog.Builder(this)
+                    returnDialog.setTitle("Flight cancellation failed")
+                    returnDialog.setMessage("Click 'Confirm' to be sent back to main menu")
+                    returnDialog.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
+                        startActivity(intentMain)
+                    }
+                    returnDialog.show()
+                }
+                dialog.show()
+
 
             }
 
@@ -122,12 +158,13 @@ class DisplayReservations : AppCompatActivity() {
         dialog.setMessage("Are you sure you want to cancel reservation? \n" +
                 "Click 'Confirm' to cancel, click 'No' to be sent back to main menu")
         dialog.setPositiveButton("Confirm"){ _: DialogInterface, _: Int ->
-            var db = DatabaseHandler(this)
-            db.cancelReservation(reservationNumber, tickets, flight)
+            /*var db = DatabaseHandler(this)
+            db.cancelReservation(reservationNumber, tickets, flight)*/
+
         }
         dialog.setNegativeButton("No"){ _: DialogInterface, _: Int ->
-            var intentMain = Intent(this, MainActivity::class.java)
-            startActivity(intentMain)
+            /*var intentMain = Intent(this, MainActivity::class.java)
+            startActivity(intentMain)*/
         }
         dialog.show()
     }

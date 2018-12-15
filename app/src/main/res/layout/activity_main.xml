@@ -9,11 +9,12 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="143dp"
-        android:layout_height="30dp"
-        android:text="@string/app_name"
+        android:layout_width="228dp"
+        android:layout_height="32dp"
+        android:text="Otter Airways"
         android:textAlignment="center"
         android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

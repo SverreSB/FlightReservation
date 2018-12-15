@@ -36,9 +36,22 @@ class AddFlight : AppCompatActivity() {
             list.add(price)
 
             if(!emptyFields(list) && !existingFlight(flightNumb)){
-                var flight = Flights(flightNumb, departure, arrival, time, seats.toInt(), 0, price.toDouble())
-                db.insertFlightsDB(flight)
-                startActivity(intent)
+                var builder = AlertDialog.Builder(this)
+                builder.setTitle("Do you want to add flight?")
+                builder.setMessage("Are you sure you want to add flight: \n" +
+                        "Flightnumber: $flightNumb\nDeparture: $departure\n" +
+                        "Arrival: $arrival \nTime: $time \n" +
+                        "Seats: $seats \nPrice: $$price \n")
+                builder.setPositiveButton("Confirm"){ dialogInterface: DialogInterface, i: Int ->
+                    var flight = Flights(flightNumb, departure, arrival, time, seats.toInt(), 0, price.toDouble())
+                    db.insertFlightsDB(flight)
+                    startActivity(intent)
+                }
+                builder.setNegativeButton("Cancel"){ dialogInterface: DialogInterface, i: Int ->
+                    Toast.makeText(this, "Flight $flightNumb is not added", Toast.LENGTH_SHORT).show()
+                    startActivity(intent)
+                }
+                builder.show()
 
             }
             else{
